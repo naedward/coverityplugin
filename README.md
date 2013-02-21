@@ -1,0 +1,4 @@
+coverityplugin
+==============
+
+Coverity Gradle Plugin
