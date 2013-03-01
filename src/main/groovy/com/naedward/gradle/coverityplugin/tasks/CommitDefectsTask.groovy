@@ -32,7 +32,7 @@ class CommitDefectsTask extends DefaultTask {
    @TaskAction 
    public void commitDefects() {
       project.task('covCommitDefects', type:Exec) {
-         commandLine('cov-commit-defects.exe', '--dir', intermediateDir.absolutePath,
+         commandLine('cov-commit-defects', '--dir', intermediateDir.absolutePath,
                '--stream', streamName, '-c', xmlConfigFile.absolutePath)
       }
       project.tasks.covCommitDefects.execute()
