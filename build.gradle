@@ -1,7 +1,7 @@
 apply plugin: "eclipse"
 apply plugin: 'groovy'
 
-project.group = "com.naedward.gradle"
+project.group = "naedward.gradle"
  
 defaultTasks = ['clean', 'build']
 
