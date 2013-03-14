@@ -21,7 +21,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Task
 import org.gradle.api.file.FileCollection
 import org.gradle.api.execution.TaskExecutionGraph
-import com.naedward.gradle.coverityplugin.tasks.*
+import naedward.gradle.coverityplugin.tasks.*
 
 import org.gradle.api.tasks.*
 
