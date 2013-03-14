@@ -1,0 +1,26 @@
+apply plugin: "eclipse"
+apply plugin: 'groovy'
+
+project.group = "naedward.gradle"
+ 
+defaultTasks = ['clean', 'build']
+
+version = '0.4.0'
+
+dependencies {
+    compile gradleApi()
+    groovy localGroovy()
+}
+
+task wrapper(type: Wrapper) {
+   gradleVersion = '1.4'
+}
+
+uploadArchives {
+   repositories {
+      ivy {
+         url "${rootDir}/.repos/ivy"
+         layout 'gradle'
+      }
+   }
+}
