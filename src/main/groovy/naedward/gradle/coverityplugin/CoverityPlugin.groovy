@@ -29,13 +29,13 @@ import org.gradle.api.tasks.*
  * Adds tasks
  * covEmit
  * covAnalyze
- * covCommitDefects
+ * covCommit
  * 
  * Each task utilizes a configure intermediate directory.  Defaults to './intDir'
  * and may be configured outside the plugin by
  * {@code 
  *  coverity {
- *       intDir = <path>  //This is the intermediate directory to store coverity custom files
+ *       File intermediateDir = <path>  //This is the intermediate directory to store coverity custom files
  *       String commitDefectsStreamName //When using covCommitDefects, this determines which stream to push to
  *       String commitDefectsXmlConfig //When using covCommitDefects, this let's you specify the host/port, user/pass in an xml file
  *     }
@@ -63,12 +63,6 @@ import org.gradle.api.tasks.*
  * 
  * If an xml config file is not specified the user will be prompted to enter a username and password.
  * 
- * When running this through bamboo the -PwithBamboo property must be specified this will cause the 
- * covCommitDefects to ignore the commitDefectsXmlConfig and use a hardcoded one in the ateapp home
- * drive.
- * 
- * The property coverityStreamName can be used to override the commitDefectsStreamName configuration.
- * 
  * This plugin currently assumes that cov-emit-java, cov-analyze, cov-commit-defects
  * are available on the command line of your execution environment.
  * 
@@ -84,22 +78,30 @@ class CoverityPlugin implements Plugin<Project> {
 
       project.task('covEmit', type:EmitTask) {
          project.tasks.covEmit.dependsOn(project.tasks.compileJava);
-         intermediateDir = project.coverity.intermediateDir;
+         doFirst {
+            intermediateDir = project.coverity.intermediateDir;
+         }
       }
 
-      project.task('covAnalyze', type:AnalyzeTask) {
+      project.task('covAnalyze', type:AnalyzeTask)  {
          project.tasks.covAnalyze.dependsOn(project.tasks.covEmit);
-         intermediateDir = project.coverity.intermediateDir;
+         doFirst {
+            intermediateDir = project.coverity.intermediateDir;
+         }
       }
 
       project.task('covCommit', type:CommitDefectsTask) {
          project.tasks.covCommit.dependsOn(project.tasks.covAnalyze)
-         streamName = project.coverity.commitDefectsStreamName
-         xmlConfigFile = project.coverity.commitDefectsXmlConfig;
-         intermediateDir = project.coverity.intermediateDir;
+         doFirst {
+            streamName = project.coverity.commitDefectsStreamName
+            xmlConfigFile = project.coverity.commitDefectsXmlConfig;
+            intermediateDir = project.coverity.intermediateDir;
+         }
       }
       project.task('covClean', type: Delete) {
-         delete project.coverity.intermediateDir;
+         doFirst {
+            delete project.coverity.intermediateDir;
+         }
       }
    }
 }
