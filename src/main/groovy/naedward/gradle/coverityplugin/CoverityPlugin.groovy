@@ -86,7 +86,9 @@ class CoverityPlugin implements Plugin<Project> {
       project.task('covAnalyze', type:AnalyzeTask)  {
          project.tasks.covAnalyze.dependsOn(project.tasks.covEmit);
          doFirst {
+            numWorkers = project.coverity.analyzeNumWorkers;
             intermediateDir = project.coverity.intermediateDir;
+            
          }
       }
 
@@ -110,6 +112,7 @@ class CoverityPluginExtension {
    File intermediateDir = new File('intDir')
    String commitDefectsStreamName
    File commitDefectsXmlConfig
+   int analyzeNumWorkers
    boolean includeTestSource = false
    boolean includeAutogenSource = false
 }
