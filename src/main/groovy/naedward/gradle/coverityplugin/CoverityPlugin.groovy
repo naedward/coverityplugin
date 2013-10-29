@@ -30,6 +30,7 @@ import org.gradle.api.tasks.*
  * covEmit
  * covAnalyze
  * covCommit
+ * (clean)[covClean]
  * 
  * Each task utilizes a configure intermediate directory.  Defaults to './intDir'
  * and may be configured outside the plugin by
@@ -104,6 +105,9 @@ class CoverityPlugin implements Plugin<Project> {
          doFirst {
             delete project.coverity.intermediateDir;
          }
+      }
+      if (project.tasks.findByName('clean')) {
+         project.tasks.clean.dependsOn project.tasks.covClean
       }
    }
 }
