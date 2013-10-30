@@ -1,6 +1,12 @@
-*.class
+# Vim Files #
+*.swp
+*~
+# Eclipse Files #
+.settings
+.project
+.classpath
 
-# Package Files #
-*.jar
-*.war
-*.ear
+# Gradle Files #
+.gradle
+build
+
