@@ -23,7 +23,8 @@ class CommitDefectsTask extends DefaultTask {
    String streamName;
    File xmlConfigFile; 
    File intermediateDir;
-   
+   File coverityHome;
+
    public CommitDefectsTask() {
       group = "Coverity"
       description = "Pushes analysis to covbuild:8080"
@@ -32,7 +33,8 @@ class CommitDefectsTask extends DefaultTask {
    @TaskAction 
    public void commitDefects() {
       project.task('covCommitDefects', type:Exec) {
-         commandLine('cov-commit-defects', '--dir', intermediateDir.absolutePath,
+          String binDir = coverityHome == null ? '' : "${coverityHome}/bin/"
+          commandLine("${binDir}cov-commit-defects", '--dir', intermediateDir.absolutePath,
                '--stream', streamName, '-c', xmlConfigFile.absolutePath)
       }
       project.tasks.covCommitDefects.execute()

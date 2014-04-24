@@ -80,6 +80,7 @@ class CoverityPlugin implements Plugin<Project> {
          project.tasks.covEmit.dependsOn(project.tasks.compileJava);
          doFirst {
             intermediateDir = project.coverity.intermediateDir;
+            coverityHome = project.coverity.coverityHome;
          }
       }
 
@@ -87,6 +88,7 @@ class CoverityPlugin implements Plugin<Project> {
          project.tasks.covAnalyze.dependsOn(project.tasks.covEmit);
          doFirst {
             intermediateDir = project.coverity.intermediateDir;
+            coverityHome = project.coverity.coverityHome;
          }
       }
 
@@ -96,6 +98,7 @@ class CoverityPlugin implements Plugin<Project> {
             streamName = project.coverity.commitDefectsStreamName
             xmlConfigFile = project.coverity.commitDefectsXmlConfig;
             intermediateDir = project.coverity.intermediateDir;
+            coverityHome = project.coverity.coverityHome;
          }
       }
       project.task('covClean', type: Delete) {
@@ -112,4 +115,5 @@ class CoverityPluginExtension {
    File commitDefectsXmlConfig
    boolean includeTestSource = false
    boolean includeAutogenSource = false
+   File coverityHome
 }

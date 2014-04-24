@@ -8,6 +8,7 @@ import org.gradle.api.tasks.*;
 
 class EmitTask extends DefaultTask {
    File intermediateDir;
+   File coverityHome;
    
    public EmitTask() {
       group = "Coverity";
@@ -54,7 +55,8 @@ class EmitTask extends DefaultTask {
          }
 
           print 'coverityClasspath=' + coverityClasspath.getAsPath()
-         commandLine 'cov-emit-java', '--dir', intermediateDir, '--classpath', coverityClasspath.getAsPath(), '--findsource', sourcePaths.toString(), '--compiler-outputs', outputPaths.toString()
+         String binDir = coverityHome == null ? '' : "${coverityHome}/bin/"
+         commandLine "${binDir}cov-emit-java", '--dir', intermediateDir, '--classpath', coverityClasspath.getAsPath(), '--findsource', sourcePaths.toString(), '--compiler-outputs', outputPaths.toString()
       }
       project.tasks.emit.execute()
    }
