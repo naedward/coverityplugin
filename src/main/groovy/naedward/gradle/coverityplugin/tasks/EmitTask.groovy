@@ -21,9 +21,11 @@ class EmitTask extends DefaultTask {
          StringBuilder sourcePaths = new StringBuilder();
          StringBuilder outputPaths = new StringBuilder();
 
-         coverityClasspath = project.sourceSets.main.runtimeClasspath
+          println 'sourceSets=' + project.sourceSets
+         println 'compileClasspath=' + project.sourceSets.main.compileClasspath.getAsPath()
+         coverityClasspath = project.sourceSets.main.compileClasspath
          if (project.coverity.includeTestSource) {
-            FileCollection diff = project.sourceSets.main.runtimeClasspath.minus(project.sourceSets.test.runtimeClasspath);
+            FileCollection diff = project.sourceSets.main.compileClasspath.minus(project.sourceSets.test.compileClasspath);
             coverityClasspath.plus(diff)
          }
 
@@ -51,6 +53,7 @@ class EmitTask extends DefaultTask {
             outputPaths.append( project.sourceSets.test.output.classesDir.getPath());
          }
 
+          print 'coverityClasspath=' + coverityClasspath.getAsPath()
          commandLine 'cov-emit-java', '--dir', intermediateDir, '--classpath', coverityClasspath.getAsPath(), '--findsource', sourcePaths.toString(), '--compiler-outputs', outputPaths.toString()
       }
       project.tasks.emit.execute()
