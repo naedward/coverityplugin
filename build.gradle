@@ -1,11 +1,12 @@
 apply plugin: "eclipse"
 apply plugin: 'groovy'
+apply plugin: 'maven'
 
 project.group = "naedward.gradle"
  
 defaultTasks = ['clean', 'build']
 
-version = '0.5.0'
+version = '0.6.0'
 
 dependencies {
     compile gradleApi()
@@ -19,8 +20,11 @@ task wrapper(type: Wrapper) {
 uploadArchives {
    repositories {
       ivy {
-         url "${rootDir}/.repos/ivy"
+         url "${buildDir}/repos/ivy"
          layout 'gradle'
+      }
+      mavenDeployer {
+         repository(url: "file://${buildDir}/repos/mvn")
       }
    }
 }

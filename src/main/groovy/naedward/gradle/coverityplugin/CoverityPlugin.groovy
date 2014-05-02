@@ -77,10 +77,11 @@ class CoverityPlugin implements Plugin<Project> {
       project.extensions.create("coverity", CoverityPluginExtension)
 
       project.task('covEmit', type:EmitTask) {
-         project.tasks.covEmit.dependsOn(project.tasks.compileJava);
          doFirst {
             intermediateDir = project.coverity.intermediateDir;
             coverityHome = project.coverity.coverityHome;
+            includeSubProjects = project.coverity.includeSubProjects;
+            bootClasspath = project.coverity.bootClasspath;
          }
       }
 
@@ -115,5 +116,7 @@ class CoverityPluginExtension {
    File commitDefectsXmlConfig
    boolean includeTestSource = false
    boolean includeAutogenSource = false
+   boolean includeSubProjects = true
    File coverityHome
+   String bootClasspath
 }
