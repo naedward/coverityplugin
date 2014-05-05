@@ -100,6 +100,10 @@ class CoverityPlugin implements Plugin<Project> {
             xmlConfigFile = project.coverity.commitDefectsXmlConfig;
             intermediateDir = project.coverity.intermediateDir;
             coverityHome = project.coverity.coverityHome;
+            covConnectHost = project.coverity.covConnectHost;
+            covConnectDataPort = project.coverity.covConnectDataPort;
+            covConnectUser = project.coverity.covConnectUser;
+            covConnectPassword = project.coverity.covConnectPassword;
          }
       }
       project.task('covClean', type: Delete) {
@@ -119,4 +123,8 @@ class CoverityPluginExtension {
    boolean includeSubProjects = true
    File coverityHome
    String bootClasspath
+   String covConnectHost
+   String covConnectDataPort
+   String covConnectUser
+   String covConnectPassword
 }

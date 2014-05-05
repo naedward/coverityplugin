@@ -6,11 +6,11 @@ project.group = "naedward.gradle"
  
 defaultTasks = ['clean', 'build']
 
-version = '0.6.0'
+version = '0.5.0'
 
 dependencies {
     compile gradleApi()
-    groovy localGroovy()
+    compile localGroovy()
 }
 
 task wrapper(type: Wrapper) {

@@ -24,6 +24,10 @@ class CommitDefectsTask extends DefaultTask {
    File xmlConfigFile; 
    File intermediateDir;
    File coverityHome;
+   String covConnectHost
+   String covConnectDataPort
+   String covConnectUser
+   String covConnectPassword
 
    public CommitDefectsTask() {
       group = "Coverity"
@@ -34,8 +38,17 @@ class CommitDefectsTask extends DefaultTask {
    public void commitDefects() {
       project.task('covCommitDefects', type:Exec) {
           String binDir = coverityHome == null ? '' : "${coverityHome}/bin/"
-          commandLine("${binDir}cov-commit-defects", '--dir', intermediateDir.absolutePath,
-               '--stream', streamName, '-c', xmlConfigFile.absolutePath)
+          def command = ["${binDir}cov-commit-defects", '--dir', intermediateDir.absolutePath,
+                         '--stream', streamName]
+          if (xmlConfigFile != null) {
+             command << '-c' << xmlConfigFile.absolutePath
+          } else {
+             command << '--host' << covConnectHost
+             command << '--dataport' << covConnectDataPort
+             command << '--user' << covConnectUser
+             command << '--password' << covConnectPassword
+          }
+          commandLine(command)
       }
       project.tasks.covCommitDefects.execute()
    }
