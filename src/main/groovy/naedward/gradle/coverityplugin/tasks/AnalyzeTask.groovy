@@ -7,7 +7,7 @@ import org.gradle.api.tasks.*;
 class AnalyzeTask extends DefaultTask {
 
    File intermediateDir;
-   int numberOfWorkers = 2;
+   int numWorkers;
    
    public AnalyzeTask() {
       group = "Coverity"
@@ -17,8 +17,15 @@ class AnalyzeTask extends DefaultTask {
    
    @TaskAction
    public void analyze() {
+      def String workerArg;
+      if ((numWorkers == null) || (numWorkers <= 0)) {
+         workerArg = "auto"   
+      } else {
+         workerArg = numWorkers.toString()
+      }
+       
       project.task('analyze', type:Exec) {
-         commandLine 'cov-analyze-java', "-j", numberOfWorkers, "--dir", intermediateDir.absolutePath, "--all"
+         commandLine 'cov-analyze-java', "-j", workerArg, "--dir", intermediateDir.absolutePath, "--all"
       }
       project.tasks.analyze.execute()
    }

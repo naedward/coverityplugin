@@ -30,6 +30,7 @@ import org.gradle.api.tasks.*
  * covEmit
  * covAnalyze
  * covCommit
+ * (clean)[covClean]
  * 
  * Each task utilizes a configure intermediate directory.  Defaults to './intDir'
  * and may be configured outside the plugin by
@@ -86,7 +87,9 @@ class CoverityPlugin implements Plugin<Project> {
       project.task('covAnalyze', type:AnalyzeTask)  {
          project.tasks.covAnalyze.dependsOn(project.tasks.covEmit);
          doFirst {
+            numWorkers = project.coverity.analyzeNumWorkers;
             intermediateDir = project.coverity.intermediateDir;
+            
          }
       }
 
@@ -103,6 +106,9 @@ class CoverityPlugin implements Plugin<Project> {
             delete project.coverity.intermediateDir;
          }
       }
+      if (project.tasks.findByName('clean')) {
+         project.tasks.clean.dependsOn project.tasks.covClean
+      }
    }
 }
 
@@ -110,6 +116,7 @@ class CoverityPluginExtension {
    File intermediateDir = new File('intDir')
    String commitDefectsStreamName
    File commitDefectsXmlConfig
+   int analyzeNumWorkers
    boolean includeTestSource = false
    boolean includeAutogenSource = false
 }
