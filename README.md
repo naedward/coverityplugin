@@ -18,6 +18,7 @@ Use artifact from github
 
     buildscript {
       repositories {
+        url //Path to local artifact
       }
       dependencies { 
         classpath 'naedward.gradle:coverityplugin:0.6.0'
