@@ -9,4 +9,6 @@
 # Gradle Files #
 .gradle
 build
+.repos
+bin
 

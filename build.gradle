@@ -9,11 +9,7 @@ version = '0.6.0'
 
 dependencies {
     compile gradleApi()
-    groovy localGroovy()
-}
-
-task wrapper(type: Wrapper) {
-   gradleVersion = '1.4'
+    compile localGroovy()
 }
 
 uploadArchives {
