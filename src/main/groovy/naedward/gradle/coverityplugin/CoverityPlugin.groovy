@@ -83,9 +83,11 @@ class CoverityPlugin implements Plugin<Project> {
             intermediateDir = project.coverity.intermediateDir;
          }
       }
-
+      project.task('covManageEmit', type: ManageEmitTask) {
+         project.tasks.covManageEmit.dependsOn(project.tasks.covEmit)
+      }
       project.task('covAnalyze', type:AnalyzeTask)  {
-         project.tasks.covAnalyze.dependsOn(project.tasks.covEmit);
+         project.tasks.covAnalyze.dependsOn(project.tasks.covManageEmit);
          doFirst {
             numWorkers = project.coverity.analyzeNumWorkers;
             intermediateDir = project.coverity.intermediateDir;
@@ -119,4 +121,5 @@ class CoverityPluginExtension {
    int analyzeNumWorkers
    boolean includeTestSource = false
    boolean includeAutogenSource = false
+   List<String> excludes = []
 }
