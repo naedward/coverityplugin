@@ -4,7 +4,7 @@ The plugin provides tasks required for analyzing & reporting defects in Java cod
 
 ## Usage
 
-To use the Coverity plugin, add the following in your root project's build script:
+To use the Coverity plugin, copy the coverityplugin-xxx.jar to `lib/plugins` directory under the root project. Then, add the following in your root project's build script:
 
     apply plugin: 'clover'
 
