@@ -72,11 +72,13 @@ apply the plugin to those projects & disable including sub-projects:
 
 ## Tasks
 
+**Before running the analysis tasks, remember to run `compileJava` task as covEmit task expects the .class files to be present.**
+
 The Coverity plugin defines the following tasks:
 
 * `covEmit`: Runs `cov-emit-java` Coverity command
-* `covAnalyze`: Runs `cov-analyze-java` Coverity command
-* `covCommit`: Runs `cov-commit-defects` Coverity command
+* `covAnalyze`: Runs `cov-analyze-java` Coverity command. This depends on `covEmit` task.
+* `covCommit`: Runs `cov-commit-defects` Coverity command. This depends on `covAnalyze` task.
 * `covClean`: Deletes `intermediateDir` directory.
 
 ## Configuring Coverity Properties
