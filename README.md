@@ -21,7 +21,7 @@ Use artifact from github
         url //Path to local artifact
       }
       dependencies { 
-        classpath 'naedward.gradle:coverityplugin:0.6.0'
+        classpath 'naedward.gradle:coverityplugin:0.7.0'
       }
     }
     apply plugin: 'coverity'
@@ -38,6 +38,7 @@ Use the coverity closure in your gradle build script
        commitDefectsXmlConfig         //File object, coverity configuration xml file, used to define the coverity host server and username/password for pushing defects, Required 
        analyzeNumWorkers              //Number of worker threads to use when using analyze task, Default [auto] VM's have issues with --auto
        includeTestSource              //Set to true to detect defects in your test source.  Default [false]
+       excludes                       //Specify regex pattern to exclude files from being analyzed. Default []
     }
     
 
@@ -46,3 +47,4 @@ Coverity Tasks
 * covAnalyze - Performs a coverity analysis on the intermediate directory.
 * covCommit - Pushes analysis to coverity server
 * covEmit - Processes all the compiled files ready to be analyzed
+* covManageEmit - Manages intermediate directory
