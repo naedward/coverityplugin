@@ -2,6 +2,26 @@
 
 The plugin provides tasks required for analyzing & reporting defects in Java code using [Coverity](http://www.coverity.com/).
 
+## Integrating coverity plugin with gradle
+Building the jar manually
+-------------------------
+* Clone the repository
+* Run gradlew jar
+* Copy build/libs/coverityplugin-<version>.jar to your favorite artifact repo
+
+Use artifact from github
+------------------------
+
+    buildscript {
+      repositories {
+        url //Path to local artifact
+      }
+      dependencies {
+        classpath 'naedward.gradle:coverityplugin:0.7.0'
+      }
+    }
+    apply plugin: 'coverity'
+
 ## Usage
 
 To use the Coverity plugin, copy the coverityplugin-xxx.jar to `lib/plugins` directory under the root project. Then, add the following in your root project's build script:
@@ -61,7 +81,7 @@ A sample XML file is:
 
 
 If the Coverity plugin is applied in the root project, it'll recurse through all the sub-projects & include the sources
-and libraries while executing `coverity-emit-java` command. If you want to apply Coverity only to selected projects,
+and libraries while executing `coverity-emit-java` command. If you want to apply Coverity only to selected sub-projects,
 apply the plugin to those projects & disable including sub-projects:
 
     coverity {
@@ -79,6 +99,7 @@ The Coverity plugin defines the following tasks:
 * `covEmit`: Runs `cov-emit-java` Coverity command
 * `covAnalyze`: Runs `cov-analyze-java` Coverity command. This depends on `covEmit` task.
 * `covCommit`: Runs `cov-commit-defects` Coverity command. This depends on `covAnalyze` task.
+* `covManageEmit`: Manages intermediate directory.
 * `covClean`: Deletes `intermediateDir` directory.
 
 ## Configuring Coverity Properties
@@ -88,6 +109,7 @@ Coverity Gradle Plugin can be configured by passing a closure to `coverity` exte
 * `intermediateDir`: The directory, where all the coverity files will be written. Defaults to `intDir`
 * `commitDefectsStreamName`: The stream name to be used while committing the defects to Coverity Connect.
 * `commitDefectsXmlConfig`: The configuration file containing the details of Coverity Connect.
+* `excludes`: Specify regex pattern to exclude files from being analyzed. Defaults to `""` (empty string).
 * `includeTestSource`: Specifies whether test sources should be analyzed by Coverity.
 * `includeTestSource`: Specifies whether test sources should be analyzed by Coverity. Defaults to `false`.
 * `includeAutogenSource`: Specifies whether source files under `autogen` directories should be analyzed by Coverity.
@@ -102,4 +124,4 @@ Coverity Gradle Plugin can be configured by passing a closure to `coverity` exte
 * `covConnectDataPort`: The datport of Coverity Connect server. Used only if `commitDefectsXmlConfig` isn't specified.
 * `covConnectUser`: The username in Coverity Connect server. Used only if `commitDefectsXmlConfig` isn't specified.
 * `covConnectPassword`: The password of `covConnectUser` in Coverity Connect server. Used only if `commitDefectsXmlConfig` isn't specified.
-
+* `analyzeNumWorkers`: Number of worker threads to use when using analyze task. Defaults to `auto`. Note: VM's have issues with --auto
