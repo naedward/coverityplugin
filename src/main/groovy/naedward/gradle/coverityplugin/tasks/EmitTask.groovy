@@ -27,10 +27,10 @@ class EmitTask extends DefaultTask {
             coverityClasspath.plus(diff)
          }
 
-         Set<File> coveritySrc = project.sourceSets.main.java.srcDirs
+         Set<File> coveritySrc = project.sourceSets.main.allJava.srcDirs
 
          if (project.coverity.includeTestSource) {
-            coveritySrc.addAll(project.sourceSets.test.java.srcDirs)
+            coveritySrc.addAll(project.sourceSets.test.allJava.srcDirs)
          }
 
          String pathSep = File.pathSeparator
@@ -40,6 +40,7 @@ class EmitTask extends DefaultTask {
                   continue
                }
             }
+            if (!dir.exists()) continue
             sourcePaths.append(dir.getCanonicalPath());
             sourcePaths.append(pathSep);
          }
