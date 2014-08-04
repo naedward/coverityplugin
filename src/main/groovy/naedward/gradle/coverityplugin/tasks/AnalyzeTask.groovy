@@ -8,7 +8,8 @@ class AnalyzeTask extends DefaultTask {
 
    File intermediateDir;
    int numWorkers;
-   
+   File coverityHome;
+
    public AnalyzeTask() {
       group = "Coverity"
       description = "Performs a coverity analysis on the intermediate directory."
@@ -25,7 +26,8 @@ class AnalyzeTask extends DefaultTask {
       }
        
       project.task('analyze', type:Exec) {
-         commandLine 'cov-analyze-java', "-j", workerArg, "--dir", intermediateDir.absolutePath, "--all"
+          String binDir = coverityHome == null ? '' : "${coverityHome}/bin/"
+          commandLine "${binDir}cov-analyze-java", "-j", workerArg, "--dir", intermediateDir.absolutePath, "--all"
       }
       project.tasks.analyze.execute()
    }

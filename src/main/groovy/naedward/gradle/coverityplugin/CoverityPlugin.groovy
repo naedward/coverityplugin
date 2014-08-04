@@ -78,9 +78,11 @@ class CoverityPlugin implements Plugin<Project> {
       project.extensions.create("coverity", CoverityPluginExtension)
 
       project.task('covEmit', type:EmitTask) {
-         project.tasks.covEmit.dependsOn(project.tasks.compileJava);
          doFirst {
             intermediateDir = project.coverity.intermediateDir;
+            coverityHome = project.coverity.coverityHome;
+            includeSubProjects = project.coverity.includeSubProjects;
+            bootClasspath = project.coverity.bootClasspath;
          }
       }
       project.task('covManageEmit', type: ManageEmitTask) {
@@ -91,7 +93,7 @@ class CoverityPlugin implements Plugin<Project> {
          doFirst {
             numWorkers = project.coverity.analyzeNumWorkers;
             intermediateDir = project.coverity.intermediateDir;
-            
+            coverityHome = project.coverity.coverityHome;
          }
       }
 
@@ -101,6 +103,11 @@ class CoverityPlugin implements Plugin<Project> {
             streamName = project.coverity.commitDefectsStreamName
             xmlConfigFile = project.coverity.commitDefectsXmlConfig;
             intermediateDir = project.coverity.intermediateDir;
+            coverityHome = project.coverity.coverityHome;
+            covConnectHost = project.coverity.covConnectHost;
+            covConnectDataPort = project.coverity.covConnectDataPort;
+            covConnectUser = project.coverity.covConnectUser;
+            covConnectPassword = project.coverity.covConnectPassword;
          }
       }
       project.task('covClean', type: Delete) {
@@ -121,5 +128,12 @@ class CoverityPluginExtension {
    int analyzeNumWorkers
    boolean includeTestSource = false
    boolean includeAutogenSource = false
+   boolean includeSubProjects = true
+   File coverityHome
+   String bootClasspath
+   String covConnectHost
+   String covConnectDataPort
+   String covConnectUser
+   String covConnectPassword
    List<String> excludes = []
 }

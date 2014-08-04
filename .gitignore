@@ -12,3 +12,11 @@ build
 .repos
 bin
 
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# IntelliJ Files #
+.idea
+*.iml
