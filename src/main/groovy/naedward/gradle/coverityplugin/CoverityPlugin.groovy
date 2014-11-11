@@ -81,8 +81,10 @@ class CoverityPlugin implements Plugin<Project> {
          doFirst {
             intermediateDir = project.coverity.intermediateDir;
             coverityHome = project.coverity.coverityHome;
-            includeSubProjects = project.coverity.includeSubProjects;
             bootClasspath = project.coverity.bootClasspath;
+            sourceDirectories = project.coverity.sourceDirectories;
+            classDirectories = project.coverity.classDirectories;
+            coverityClasspath = project.coverity.coverityClasspath;
          }
       }
       project.task('covManageEmit', type: ManageEmitTask) {
@@ -126,14 +128,15 @@ class CoverityPluginExtension {
    String commitDefectsStreamName
    File commitDefectsXmlConfig
    int analyzeNumWorkers
-   boolean includeTestSource = false
-   boolean includeAutogenSource = false
-   boolean includeSubProjects = true
    File coverityHome
-   String bootClasspath
    String covConnectHost
    String covConnectDataPort
    String covConnectUser
    String covConnectPassword
+   FileCollection sourceDirectories
+   FileCollection coverityClasspath
+   FileCollection bootClasspath
+   FileCollection classDirectories
+   
    List<String> excludes = []
 }

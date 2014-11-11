@@ -6,7 +6,7 @@ project.group = "naedward.gradle"
  
 defaultTasks = ['clean', 'build']
 
-version = '0.7.0'
+version = '1.0.6'
 
 dependencies {
     compile gradleApi()

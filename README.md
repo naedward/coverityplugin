@@ -1,6 +1,7 @@
 # Coverity Gradle Plugin
 
 The plugin provides tasks required for analyzing & reporting defects in Java code using [Coverity](http://www.coverity.com/).
+This plugin wraps the coverity provided cov-emit-java, cov-analyze-java, and cov-commit-defects command line calls.
 
 ## Integrating coverity plugin with gradle
 Building the jar manually
@@ -22,11 +23,11 @@ Use artifact from github
     }
     apply plugin: 'coverity'
 
-## Usage
+## Using the plugin with your project
 
 To use the Coverity plugin, copy the coverityplugin-xxx.jar to `lib/plugins` directory under the root project. Then, add the following in your root project's build script:
 
-    apply plugin: 'clover'
+    apply plugin: 'coverity'
 
     buildscript {
         repositories {
@@ -49,6 +50,9 @@ Coverity tasks can be configured using `coverity` extension. Typical usage will 
         covConnectUser = System.getProperty("COVERITY_USER")
         covConnectPassword = System.getProperty("COVERITY_PASSWORD")
         commitDefectsStreamName = System.getProperty("COVERITY_STREAM_NAME")
+        classDirectories = files("${buildDir}/classes")
+        sourceDirectories = files("src")
+        coverityClasspath = project.sourceSets.main.compileClasspath + project.sourceSets.test.compileClasspath
     }
 
 Alternatively, the Coverity Connect details can be specified using a configuration file too:
@@ -58,6 +62,9 @@ Alternatively, the Coverity Connect details can be specified using a configurati
         coverityHome = System.getProperty("COVERITY_HOME")
         commitDefectsXmlConfig = file("/absolute/path/to/config/file")
         commitDefectsStreamName = System.getProperty("COVERITY_STREAM_NAME")
+        classDirectories = files("${buildDir}/classes")
+        sourceDirectories = files("src")
+        coverityClasspath = project.sourceSets.main.compileClasspath + project.sourceSets.test.compileClasspath
     }
 
 A sample XML file is:
@@ -80,19 +87,9 @@ A sample XML file is:
     </coverity>
 
 
-If the Coverity plugin is applied in the root project, it'll recurse through all the sub-projects & include the sources
-and libraries while executing `coverity-emit-java` command. If you want to apply Coverity only to selected sub-projects,
-apply the plugin to those projects & disable including sub-projects:
-
-    coverity {
-        ...
-        includeSubProjects = false
-        ...
-    }
-
 ## Tasks
 
-**Before running the analysis tasks, remember to run `compileJava` task as covEmit task expects the .class files to be present.**
+**Before running the analysis tasks, remember to build your class files as covEmit task expects the .class files to be present.**
 
 The Coverity plugin defines the following tasks:
 
@@ -110,12 +107,6 @@ Coverity Gradle Plugin can be configured by passing a closure to `coverity` exte
 * `commitDefectsStreamName`: The stream name to be used while committing the defects to Coverity Connect.
 * `commitDefectsXmlConfig`: The configuration file containing the details of Coverity Connect.
 * `excludes`: Specify regex pattern to exclude files from being analyzed. Defaults to `""` (empty string).
-* `includeTestSource`: Specifies whether test sources should be analyzed by Coverity.
-* `includeTestSource`: Specifies whether test sources should be analyzed by Coverity. Defaults to `false`.
-* `includeAutogenSource`: Specifies whether source files under `autogen` directories should be analyzed by Coverity.
- Defaults to `false`.
-* `includeSubProjects`: Specifies whether to recursively include source & library files from sub-projects.
- Defaults to `true`.
 * `coverityHome`: The location of cov-analysis installation. If cov-analysis/bin directory is in the PATH,
  this can be left null.
 * `bootClasspath`: The bootclasspath to be used during `cov-emit-java`. If the default models included in
@@ -125,3 +116,8 @@ Coverity Gradle Plugin can be configured by passing a closure to `coverity` exte
 * `covConnectUser`: The username in Coverity Connect server. Used only if `commitDefectsXmlConfig` isn't specified.
 * `covConnectPassword`: The password of `covConnectUser` in Coverity Connect server. Used only if `commitDefectsXmlConfig` isn't specified.
 * `analyzeNumWorkers`: Number of worker threads to use when using analyze task. Defaults to `auto`. Note: VM's have issues with --auto
+* `sourceDirectories`: FileCollection of all directories where coverity should look for source files
+* `classDirectories`: FileCollection of all directories where class files should be found
+* `coverityClasspath`: FileCollection of all directories where coverity should look for additional symbols.  Often project.sourceSets.main.compileClasspath
+
+
